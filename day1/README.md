@@ -1,4 +1,4 @@
-# Day [X]: [First Part](https://adventofcode.com/2024/day/1)
+# Day [1]: [First Part](https://adventofcode.com/2024/day/1)
 
 ## Problem Description
 Brief problem about ordering two vectors and then traversing them. 
@@ -17,7 +17,7 @@ m = second vector
 
 ## Notes
 
-# Day [X]: [Second Part](https://adventofcode.com/2024/day/1)
+# Day [1]: [Second Part](https://adventofcode.com/2024/day/1)
 
 ## Problem Description
 In the second part was necessary to count the repetitions of each number in the right vector. After that, the number of aparitions should be multiplied by the number in the right. I used a dictionary, that is suitable to be used to count aparitions. 

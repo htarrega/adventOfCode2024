@@ -1,4 +1,4 @@
-# Day [X]: [First Part - Valid Report Analysis]
+# Day [2]: [First Part](https://adventofcode.com/2024/day/2)
 
 ## Problem Description
 Given a sequence of numbers in each report, determine if it is a valid report. A report is valid if:
@@ -28,7 +28,7 @@ Given a sequence of numbers in each report, determine if it is a valid report. A
 
 ---
 
-# Day [X]: [Second Part - Problem Dampener]
+# Day [2]: [Second Part](https://adventofcode.com/2024/day/2)
 
 ## Problem Description
 Update the report validation logic to account for the **Problem Dampener**, which allows removing a single element from a sequence to make it valid. A report is valid if:

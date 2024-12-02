@@ -45,8 +45,7 @@ def part2():
 
 	total_distance = 0
 	for num in list1:
-		if num in right_dict:
-			total_distance+= right_dict[num]*num
+		right_dict[right_num] = right_dict.get(right_num, 0) + 1
 	print("Total distance for second part = " + str(total_distance))
 
 part1()

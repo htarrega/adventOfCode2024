@@ -23,6 +23,7 @@ clang++ -std=c++20 <sourceCodeName>.cpp -o <executableName>
 | Day | Name           | Stars |
 | --- | -------------- | ----- |
 | 01  | Historian Hysteria      |⭐⭐|
+| 02  | Red-Nosed Reports      |⭐⭐|
 
 ## Goals for the next year
 
