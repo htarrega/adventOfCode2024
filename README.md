@@ -26,6 +26,8 @@ clang++ -std=c++20 <sourceCodeName>.cpp -o <executableName>
 | 02  | Red-Nosed Reports      |⭐⭐|
 | 03  | Mull It Over      |⭐⭐|
 | 04  |  Ceres Search     |⭐⭐|
+| 05  |   Print Queue     |⭐⭐|
+
 
 ## Goals for the next year
 
