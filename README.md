@@ -27,7 +27,9 @@ clang++ -std=c++20 <sourceCodeName>.cpp -o <executableName>
 | 03  | Mull It Over      |⭐⭐|
 | 04  |  Ceres Search     |⭐⭐|
 | 05  |   Print Queue     |⭐⭐|
-
+| 06  |   Guard Gallivant     |⭐|
+| 07  |   Bridge Repair     ||
+| 08  |   Resonant Collinearity|⭐⭐|
 
 ## Goals for the next year
 
