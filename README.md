@@ -31,6 +31,7 @@ clang++ -std=c++20 <sourceCodeName>.cpp -o <executableName>
 | 07  |   Bridge Repair     ||
 | 08  |   Resonant Collinearity|⭐⭐|
 | 09  |   Disk Fragmenter |⭐⭐|
+| 10  |   Hoof It |⭐⭐|
 
 ## Goals for the next year
 
