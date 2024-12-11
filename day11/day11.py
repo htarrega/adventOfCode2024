@@ -1,5 +1,3 @@
-import math
-
 def part1():
     total = 0
 
@@ -8,8 +6,6 @@ def part1():
     
     new_rocks = []
     for iter in range(0,25):
-        #print("iter: "+str(iter)) 
-        #print(rocks)
         for rock in rocks:
             if rock == 0:
                 new_rocks.append(1)
@@ -29,7 +25,40 @@ def part1():
 
     print("Part 1 total stones: "+ str(total))
 
-from collections import deque
-import array
+def part2():
+    with open("input.txt", 'r') as file:
+        input_stones = file.readline().split()
+    
+    d = {}
+    for val in input_stones:
+        val = int(val)
+        d[val] = d.get(val, 0) + 1
+    
+    def process(num):
+        if num == 0:
+            return [1]
+        elif len(str(num)) % 2 == 0:
+            length = len(str(num))
+            return [
+                int(str(num)[0 : length // 2]),
+                int(str(num)[length // 2 :])
+            ]
+        else:
+            return [num * 2024]
+    
+    for x in range(75):
+        d2 = {}
+        for key in list(d):
+            if d[key] > 0:
+                num = d[key]
+                d[key] -= num
+                for val in process(key):
+                    d2[val] = d2.get(val, 0) + num
+        for key, value in d2.items():
+            d[key] = d.get(key, 0) + value
+
+    print(f"Part 2 total stones after 75 blinks: {sum(d.values())}")
+
 
 part1()
+part2()
