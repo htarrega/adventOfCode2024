@@ -32,6 +32,8 @@ clang++ -std=c++20 <sourceCodeName>.cpp -o <executableName>
 | 08  |   Resonant Collinearity|⭐⭐|
 | 09  |   Disk Fragmenter |⭐⭐|
 | 10  |   Hoof It |⭐⭐|
+| 11  |   Plutonian Pebbles |⭐⭐|
+
 
 ## Goals for the next year
 
