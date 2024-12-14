@@ -33,6 +33,9 @@ clang++ -std=c++20 <sourceCodeName>.cpp -o <executableName>
 | 09  |   Disk Fragmenter |⭐⭐|
 | 10  |   Hoof It |⭐⭐|
 | 11  |   Plutonian Pebbles |⭐⭐|
+| 12  |    ||
+| 13  |    ||
+| 14  | Restroom Redoubt   |⭐⭐|
 
 
 ## Goals for the next year
