@@ -36,6 +36,7 @@ clang++ -std=c++20 <sourceCodeName>.cpp -o <executableName>
 | 12  |    ||
 | 13  |    ||
 | 14  | Restroom Redoubt   |⭐⭐|
+| 15  |  Warehouse Woes   |⭐⭐|
 
 
 ## Goals for the next year
