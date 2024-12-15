@@ -33,4 +33,4 @@ In this part, robots are moved as a group, and the program prints the grid after
 ---
 
 ## Notes
-- Really cool problem output. Why 15? IDK, would have worked with other numbers too.
+- I had to research about complex numbers here. Difficult problem.
