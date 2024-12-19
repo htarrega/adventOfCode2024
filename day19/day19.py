@@ -39,6 +39,28 @@ class TreeNode:
         
         memo[design] = False
         return False
+    
+    def count_arrangements(self, design, memo=None):
+        if memo is None:
+            memo = {}
+            
+        if not design:
+            return 1
+            
+        if design in memo:
+            return memo[design]
+            
+        total = 0
+        current = self
+        for i, char in enumerate(design):
+            if char not in current.children:
+                break
+            current = current.children[char]
+            if current.is_pattern:
+                total += self.count_arrangements(design[i + 1:], memo)
+                
+        memo[design] = total
+        return total
 
 def part1():
     with open('input.txt', 'r') as file:
@@ -64,4 +86,29 @@ def part1():
     
     print("Total valid designs for part1:", valids)
 
+def part2():
+    with open('input.txt', 'r') as file:
+        lines = [line.strip() for line in file.readlines() if line.strip()]
+    
+    towels = None
+    designs = []
+    root = TreeNode()
+    
+    for i, line in enumerate(lines):
+        if i == 0:
+            towels = [item.strip() for item in line.split(",")]
+        else:
+            designs.append(line)
+    
+    for towel in towels:
+        root.insert(towel)
+    
+    total_arrangements = 0
+    for design in designs:
+        arrangements = root.count_arrangements(design)
+        total_arrangements += arrangements
+    
+    print("Total arrangements for part2:", total_arrangements)
+
 part1()
+part2()
