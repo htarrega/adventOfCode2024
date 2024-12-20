@@ -21,13 +21,16 @@ struct State {
       : x(x), y(y), steps(s), cheating(c), cheatStepsLeft(cl), cheatStart(cs) {}
 };
 
-vector<vector<char>> loadGrid(const string &filename) {
+vector<vector<char>> loadGrid() {
   vector<vector<char>> grid;
-  ifstream file(filename);
+  ifstream file("aux.txt");
+  if (!file.is_open()) {
+    cerr << "Could not open aux.txt" << endl;
+    exit(1);
+  }
   string line;
   while (getline(file, line)) {
-    vector<char> row(line.begin(), line.end());
-    grid.push_back(row);
+    grid.push_back(vector<char>(line.begin(), line.end()));
   }
   return grid;
 }
@@ -156,12 +159,7 @@ vector<CheatResult> findCheats(const vector<vector<char>> &grid,
 }
 
 int main() {
-  vector<vector<char>> grid;
-  string line;
-  while (getline(cin, line)) {
-    grid.push_back(vector<char>(line.begin(), line.end()));
-  }
-
+  vector<vector<char>> grid = loadGrid();
   auto [start, end] = findStartAndEnd(grid);
   vector<CheatResult> cheats = findCheats(grid, start, end);
 
