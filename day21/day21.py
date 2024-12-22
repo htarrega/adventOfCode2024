@@ -31,7 +31,7 @@ down = Node("v")
 left = Node("<")
 right = Node(">")
 
-start_A.transitions = [(up, "<"), (right, "v")]
+start_A.transitions = [(right, "v"),(up, "<")]
 up.transitions = [(start_A, ">"), (down, "v")]
 down.transitions = [(left, "<"), (right, ">"), (up, "^")]
 right.transitions = [(down, "<"), (start_A, "^")]
@@ -117,11 +117,26 @@ def process_to_directions(input_sequence, start_node, dict):
     
     return res
 
-combination = "029A"
-result = process_to_directions(combination, start_keypad, node_dict)
-print(result)
-result2 = process_to_directions(result, start_A, dir_dict)
-print(result2)
-result3 = process_to_directions(result2, start_A, dir_dict)
-print(result3)
-print(len(result3))
+
+def part1():
+    total = 0
+
+    with open('aux.txt', 'r') as file:
+        lines = [line.strip() for line in file.readlines() if line.strip()]
+    
+    for line in lines:
+        print(line)
+        result = process_to_directions(line, start_keypad, node_dict)
+        result2 = process_to_directions(result, start_A, dir_dict)
+        result3 = process_to_directions(result2, start_A, dir_dict)
+
+        parts = line.split("A")
+        print(len(result3))
+        print(parts[0])
+        print("----")
+        total = total + len(result3)*int(parts[0])
+
+
+    print("Total for part 1: " + str(total))
+
+part1()
