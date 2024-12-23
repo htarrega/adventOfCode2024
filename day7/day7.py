@@ -1,4 +1,4 @@
-from itertools import combinations
+from itertools import product
 
 def count_combinations(numbers: str) -> int:
     nums = [int(x) for x in numbers.split()]
@@ -19,38 +19,25 @@ def count_combinations(numbers: str) -> int:
             return result
 
         n = len(nums) - 1
-        for _ in range(n):
-            ops = [''] * n
-            stack = [(0, ops[:])]
-
-            while stack:
-                pos, current_ops = stack.pop()
-                if pos == n:
-                    if evaluate_expression(nums, current_ops) == target:
-                        return True
-                else:
-                    for op in ['+', '*']:
-                        new_ops = current_ops[:]
-                        new_ops[pos] = op
-                        stack.append((pos + 1, new_ops))
+        for ops in product(['+', '*'], repeat=n):
+            if evaluate_expression(nums, ops) == target:
+                return True
         return False
 
-    for r in range(2, len(numbers) + 1):
-        for combo in combinations(numbers, r):
-            if try_operations(list(combo), target):
-                return target
-
-    return 0
+    return target if try_operations(numbers, target) else 0
 
 def part1():
-    file = open('aux.txt', 'r')
-    for line in file:
-        print(line)
-        line = file.readline()
-        div = line.split()
-        if len(div) > 0:
-            div[0] = div[0][:-1]
-            print(div)
-            print(count_combinations(" ".join(div)))
+    total_calibration = 0
+    with open('input.txt', 'r') as file:
+        for line in file:
+            line = line.strip()
+            if line:
+                parts = line.split(':')
+                if len(parts) == 2:
+                    test_value = int(parts[0].strip())
+                    numbers = f"{test_value} {parts[1].strip()}"
+                    total_calibration += count_combinations(numbers)
+
+    print(total_calibration)
 
 part1()
