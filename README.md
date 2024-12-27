@@ -38,7 +38,7 @@ clang++ -std=c++20 <sourceCodeName>.cpp -o <executableName>
 | 14  | Restroom Redoubt   |⭐⭐|
 | 15  |  Warehouse Woes   |⭐⭐|
 | 16  |  Reindeer Maze  |⭐|
-| 17  |  Chronospatial Computer  |⭐|
+| 17  |  Chronospatial Computer  |⭐⭐|
 | 18  |  RAM Run  |⭐⭐|
 | 19  | Linen Layout |⭐⭐|
 
