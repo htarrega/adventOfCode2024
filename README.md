@@ -41,6 +41,7 @@ clang++ -std=c++20 <sourceCodeName>.cpp -o <executableName>
 | 17  |  Chronospatial Computer  |⭐⭐|
 | 18  |  RAM Run  |⭐⭐|
 | 19  | Linen Layout |⭐⭐|
+| 20  | Race Condition ||
 
 
 ## Goals for the next year
