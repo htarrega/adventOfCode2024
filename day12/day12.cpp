@@ -222,10 +222,6 @@ int part2() {
   vector<int> areas = countElementsById(tiles);
   vector<int> sides = calculateNumberOfSidesById(tiles);
 
-  for (auto num : sides) {
-    cout << num << endl;
-  }
-
   int total = 0;
   for (int i = 0; i < areas.size(); i++) {
     total += areas[i] * (sides[i]);
