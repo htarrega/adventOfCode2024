@@ -33,7 +33,7 @@ clang++ -std=c++20 <sourceCodeName>.cpp -o <executableName>
 | 09  |   Disk Fragmenter |⭐⭐|
 | 10  |   Hoof It |⭐⭐|
 | 11  |   Plutonian Pebbles |⭐⭐|
-| 12  |   Garden Groups ||
+| 12  |   Garden Groups |⭐⭐|
 | 13  |    ||
 | 14  | Restroom Redoubt   |⭐⭐|
 | 15  |  Warehouse Woes   |⭐⭐|
