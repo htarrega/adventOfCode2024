@@ -25,3 +25,29 @@ The goal is to minimize tokens spent to win as many prizes as possible, given th
 ## Notes
 
 - This brute-force solution is effective for small limits but inefficient for larger ranges. Mathematical optimization is recommended for larger-scale inputs.
+
+---
+
+# Day 13: [Part 2](https://adventofcode.com/2024/day/13)
+
+## Problem Description
+Same claw machine setup as Part 1, but prize coordinates are increased by 10^13 in both X and Y dimensions, making brute force impractical.
+
+## Solution
+- **Approach:**
+1. Same input parsing for button movements
+2. Add 10^13 to prize coordinates
+3. Use linear system solver to find intersection point:
+  ```python
+  a_x * a + b_x * b = x_prize
+  a_y * a + b_y * b = y_prize
+  ```
+4. Check if solution has integer values
+5. Calculate token cost: 3 * a + b
+
+- **Time Complexity:** O(M), where M is number of machines
+- **Space Complexity:**  O(1)
+
+## Notes
+
+- Mathematical solution scales efficiently for large coordinates
