@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -132,10 +134,98 @@ void part1() {
 
   Solution solution;
   int result = solution.solve(input);
-  cout << result << endl;
+  cout << "Part 1 Result: " << result << endl;
+}
+
+class SolutionPart2 {
+  vector<string> grid;
+  int rows, cols;
+  Pos start, end;
+  vector<pair<int, int>> dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+
+  bool isValid(int row, int col) {
+    return row >= 0 && row < rows && col >= 0 && col < cols &&
+           grid[row][col] != '#';
+  }
+
+ public:
+  int solvePart2(vector<string>& input) {
+    grid = input;
+    rows = grid.size();
+    cols = grid[0].size();
+
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        if (grid[i][j] == 'S') start = {i, j};
+        if (grid[i][j] == 'E') end = {i, j};
+      }
+    }
+
+    // BFS to compute shortest paths
+    queue<pair<Pos, int>> q;
+    map<Pos, int> visited;
+    q.push({start, 0});
+    visited[start] = 0;
+
+    while (!q.empty()) {
+      auto [curr, time] = q.front();
+      q.pop();
+
+      if (curr == end) continue;
+
+      for (auto& dir : dirs) {
+        int newRow = curr.row + dir.first;
+        int newCol = curr.col + dir.second;
+        Pos next = {newRow, newCol};
+
+        if (isValid(newRow, newCol) && visited.find(next) == visited.end()) {
+          visited[next] = time + 1;
+          q.push({next, time + 1});
+        }
+      }
+    }
+
+    int cheats = 0;
+    const int threshold = 100;
+    vector<pair<Pos, int>> path(visited.begin(), visited.end());
+    sort(path.begin(), path.end(),
+         [](auto& a, auto& b) { return a.second < b.second; });
+
+    for (size_t t2 = threshold; t2 < path.size(); t2++) {
+      for (size_t t1 = 0; t1 < t2 - threshold; t1++) {
+        Pos p1 = path[t1].first;
+        Pos p2 = path[t2].first;
+        int distance = abs(p1.row - p2.row) + abs(p1.col - p2.col);
+        int timeSaved = path[t2].second - path[t1].second - distance;
+
+        if (distance <= 20 && timeSaved >= threshold) {
+          cheats++;
+        }
+      }
+    }
+
+    return cheats;
+  }
+};
+
+void part2() {
+  ifstream file("input.txt");
+  vector<string> input;
+  string line;
+  while (getline(file, line)) {
+    if (!line.empty()) {
+      input.push_back(line);
+    }
+  }
+  file.close();
+
+  SolutionPart2 solutionPart2;
+  int result = solutionPart2.solvePart2(input);
+  cout << "Part 2 Result: " << result << endl;
 }
 
 int main() {
   part1();
+  part2();
   return 0;
 }
