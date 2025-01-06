@@ -20,7 +20,7 @@ clang++ -std=c++20 <sourceCodeName>.cpp -o <executableName>
 
 | :warning: WARNING           |
 |:----------------------------|
-| emember to load the inputs from the AoC page since I haven't uploaded them to reduce storage usage.  |
+| Remember to load the inputs from the AoC page since I haven't uploaded them to reduce storage usage.  |
 
 ## Overview
 
