@@ -1,175 +1,141 @@
 #include <fstream>
 #include <iostream>
+#include <limits>
+#include <map>
 #include <queue>
 #include <set>
-#include <sstream>
 #include <string>
-#include <tuple>
 #include <vector>
 using namespace std;
 
-const vector<pair<int, int>> DIRECTIONS = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-
-struct State {
-  int x, y;
-  int steps;
-  bool cheating;
-  int cheatStepsLeft;
-  pair<int, int> cheatStart;
-
-  State(int x, int y, int s, bool c, int cl, pair<int, int> cs)
-      : x(x), y(y), steps(s), cheating(c), cheatStepsLeft(cl), cheatStart(cs) {}
+struct Pos {
+  int row, col;
+  bool operator==(const Pos& other) const {
+    return row == other.row && col == other.col;
+  }
+  bool operator<(const Pos& other) const {
+    return row < other.row || (row == other.row && col < other.col);
+  }
 };
 
-vector<vector<char>> loadGrid() {
-  vector<vector<char>> grid;
-  ifstream file("aux.txt");
-  if (!file.is_open()) {
-    cerr << "Could not open aux.txt" << endl;
-    exit(1);
-  }
-  string line;
-  while (getline(file, line)) {
-    grid.push_back(vector<char>(line.begin(), line.end()));
-  }
-  return grid;
-}
-
-bool isValidPosition(int x, int y, const vector<vector<char>> &grid) {
-  return x >= 0 && x < grid.size() && y >= 0 && y < grid[0].size();
-}
-
-pair<pair<int, int>, pair<int, int>>
-findStartAndEnd(const vector<vector<char>> &grid) {
-  pair<int, int> start = {-1, -1};
-  pair<int, int> end = {-1, -1};
-  for (int i = 0; i < grid.size(); i++) {
-    for (int j = 0; j < grid[0].size(); j++) {
-      if (grid[i][j] == 'S') {
-        start = {i, j};
-      } else if (grid[i][j] == 'E') {
-        end = {i, j};
-      }
-    }
-  }
-  return {start, end};
-}
-
-int stepsToExit(const vector<vector<char>> &grid, pair<int, int> start,
-                pair<int, int> end) {
-  if (start.first == -1 || end.first == -1)
-    return -1;
-
-  int rows = grid.size();
-  int cols = grid[0].size();
-  vector<vector<bool>> visited(rows, vector<bool>(cols, false));
-  vector<vector<int>> distance(rows, vector<int>(cols, -1));
-  queue<pair<int, int>> q;
-
-  q.push(start);
-  visited[start.first][start.second] = true;
-  distance[start.first][start.second] = 0;
-
-  while (!q.empty()) {
-    auto [x, y] = q.front();
-    q.pop();
-
-    if (x == end.first && y == end.second) {
-      return distance[x][y];
-    }
-
-    for (auto [dx, dy] : DIRECTIONS) {
-      int newX = x + dx;
-      int newY = y + dy;
-
-      if (isValidPosition(newX, newY, grid) && grid[newX][newY] != '#' &&
-          !visited[newX][newY]) {
-        visited[newX][newY] = true;
-        distance[newX][newY] = distance[x][y] + 1;
-        q.push({newX, newY});
-      }
-    }
-  }
-  return -1;
-}
-
-struct CheatResult {
-  int timeSaved;
-  pair<int, int> startPos;
-  pair<int, int> endPos;
+struct Cheat {
+  Pos start, end;
+  int savings;
+  bool operator<(const Cheat& other) const { return savings > other.savings; }
 };
 
-vector<CheatResult> findCheats(const vector<vector<char>> &grid,
-                               pair<int, int> start, pair<int, int> end) {
-  vector<CheatResult> results;
-  int rows = grid.size();
-  int cols = grid[0].size();
-  int normalTime = stepsToExit(grid, start, end);
+class Solution {
+  vector<string> grid;
+  Pos start, end;
+  int rows, cols;
+  vector<pair<int, int>> dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
-  set<tuple<int, int, bool, int>> visited;
-  queue<State> q;
-  q.push(State(start.first, start.second, 0, false, 0, {-1, -1}));
+  bool isValid(int row, int col, bool canCheat = false) {
+    if (row < 0 || row >= rows || col < 0 || col >= cols) return false;
+    return canCheat || grid[row][col] != '#';
+  }
 
-  while (!q.empty()) {
-    State curr = q.front();
-    q.pop();
+  int bfs(Pos from, Pos to, bool allowWalls = false) {
+    vector<vector<int>> dist(rows,
+                             vector<int>(cols, numeric_limits<int>::max()));
+    queue<Pos> q;
 
-    if (curr.x == end.first && curr.y == end.second &&
-        curr.cheatStart.first != -1) {
-      int timeSaved = normalTime - curr.steps;
-      if (timeSaved > 0) {
-        results.push_back({timeSaved, curr.cheatStart, {curr.x, curr.y}});
+    q.push(from);
+    dist[from.row][from.col] = 0;
+
+    while (!q.empty()) {
+      Pos curr = q.front();
+      q.pop();
+
+      if (curr == to) return dist[curr.row][curr.col];
+
+      for (auto& dir : dirs) {
+        int newRow = curr.row + dir.first;
+        int newCol = curr.col + dir.second;
+
+        if (isValid(newRow, newCol, allowWalls) &&
+            dist[newRow][newCol] == numeric_limits<int>::max()) {
+          dist[newRow][newCol] = dist[curr.row][curr.col] + 1;
+          q.push({newRow, newCol});
+        }
       }
-      continue;
     }
+    return numeric_limits<int>::max();
+  }
 
-    for (auto [dx, dy] : DIRECTIONS) {
-      int newX = curr.x + dx;
-      int newY = curr.y + dy;
+  vector<Cheat> findCheats(int normalPathLength) {
+    vector<Cheat> cheats;
 
-      if (!isValidPosition(newX, newY, grid))
-        continue;
+    for (int r1 = 0; r1 < rows; r1++) {
+      for (int c1 = 0; c1 < cols; c1++) {
+        if (!isValid(r1, c1)) continue;
 
-      if (!curr.cheating) {
-        if (grid[newX][newY] != '#') {
-          auto state = make_tuple(newX, newY, false, 0);
-          if (visited.find(state) == visited.end()) {
-            visited.insert(state);
-            q.push(
-                State(newX, newY, curr.steps + 1, false, 0, curr.cheatStart));
+        int toStart = bfs(start, {r1, c1});
+        if (toStart == numeric_limits<int>::max()) continue;
+
+        for (int r2 = max(0, r1 - 2); r2 <= min(rows - 1, r1 + 2); r2++) {
+          for (int c2 = max(0, c1 - 2); c2 <= min(cols - 1, c1 + 2); c2++) {
+            if (!isValid(r2, c2)) continue;
+            if (abs(r2 - r1) + abs(c2 - c1) > 2) continue;
+
+            int toEnd = bfs({r2, c2}, end);
+            if (toEnd == numeric_limits<int>::max()) continue;
+
+            int cheatedPath = toStart + abs(r2 - r1) + abs(c2 - c1) + toEnd;
+            int savings = normalPathLength - cheatedPath;
+
+            if (savings > 0) {
+              cheats.push_back({{r1, c1}, {r2, c2}, savings});
+            }
           }
         }
-
-        auto cheatState = make_tuple(newX, newY, true, 2);
-        if (visited.find(cheatState) == visited.end()) {
-          visited.insert(cheatState);
-          q.push(State(newX, newY, curr.steps + 1, true, 1, {curr.x, curr.y}));
-        }
-      } else if (curr.cheatStepsLeft > 0) {
-        auto state = make_tuple(newX, newY, true, curr.cheatStepsLeft - 1);
-        if (visited.find(state) == visited.end() && grid[newX][newY] != '#') {
-          visited.insert(state);
-          q.push(State(newX, newY, curr.steps + 1, true,
-                       curr.cheatStepsLeft - 1, curr.cheatStart));
-        }
       }
     }
+    return cheats;
   }
-  return results;
+
+ public:
+  int solve(vector<string>& input) {
+    grid = input;
+    rows = grid.size();
+    cols = grid[0].size();
+
+    for (int i = 0; i < rows; i++) {
+      for (int j = 0; j < cols; j++) {
+        if (grid[i][j] == 'S') start = {i, j};
+        if (grid[i][j] == 'E') end = {i, j};
+      }
+    }
+
+    int normalPathLength = bfs(start, end);
+    vector<Cheat> cheats = findCheats(normalPathLength);
+
+    int count = 0;
+    for (const auto& cheat : cheats) {
+      if (cheat.savings >= 100) count++;
+    }
+    return count;
+  }
+};
+
+void part1() {
+  ifstream file("input.txt");
+
+  vector<string> input;
+  string line;
+  while (getline(file, line)) {
+    if (!line.empty()) {
+      input.push_back(line);
+    }
+  }
+  file.close();
+
+  Solution solution;
+  int result = solution.solve(input);
+  cout << result << endl;
 }
 
 int main() {
-  vector<vector<char>> grid = loadGrid();
-  auto [start, end] = findStartAndEnd(grid);
-  vector<CheatResult> cheats = findCheats(grid, start, end);
-
-  int count = 0;
-  for (const auto &cheat : cheats) {
-    if (cheat.timeSaved >= 100) {
-      count++;
-    }
-  }
-
-  cout << count << endl;
+  part1();
   return 0;
 }
