@@ -41,12 +41,11 @@ clang++ -std=c++20 <sourceCodeName>.cpp -o <executableName>
 | 17  |  Chronospatial Computer  |⭐⭐|
 | 18  |  RAM Run  |⭐⭐|
 | 19  | Linen Layout |⭐⭐|
-| 20  | Race Condition ||
+| 20  | Race Condition |⭐⭐|
 
-
-## Goals for the next year
-
-- TODO
+## Drawn image of this year
+This is the generated image after finishing 20 of 25 problems:
+![alt text](lights.png)
 
 ## License
 
